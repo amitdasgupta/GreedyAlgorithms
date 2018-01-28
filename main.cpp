@@ -1,53 +1,124 @@
 #include <iostream>
 #include<queue>
+#include<string>
 using namespace std;
-class point
+class HeapNode
 {
-    int x;
-    int y;
 public:
-    point(int x,int y)
+    char data;
+    unsigned freq;
+    HeapNode* left;
+    HeapNode* right;
+    HeapNode(char ch,int f)
     {
-        this->x=x;
-        this->y=y;
-    }
-    int getX() const{
-    return x;
-    }
-    int getY() const{
-    return y;
+        data=ch;
+        freq=f;
+        left=NULL;
+        right=NULL;
     }
 };
 class MyComparartor
 {
 public:
-    int operator() (const point &p1,const point &p2)
+    int operator() ( HeapNode  *p1, HeapNode  *p2)
 {
-    return p1.getX()<p2.getX();
+    return p1->freq>p2->freq;
 }
 };
-void showpq(priority_queue<point,vector<point>,MyComparartor> pq)
+void showpq(priority_queue<HeapNode*,vector<HeapNode*>,MyComparartor> pq)
 {
-    while(!pq.empty())
-    {
-        point p=pq.top();
-        cout<<p.getX()<<" "<<p.getY()<<",";
+    while(!pq.empty()){
+        HeapNode *p=pq.top();
+        cout<<p->data<<" "<<p->freq<<",";
         pq.pop();
     }
     cout<<endl;
 }
+void printProcessedCodes(HeapNode* h,string &s)
+{
+
+        if(!h->left&&!h->right)
+        {
+            cout<<h->data<<" : "<<s<<endl;
+            return;
+        }
+    else
+        {
+
+            if(h->left)
+            {
+                s.push_back('0');
+                printProcessedCodes(h->left,s);
+                s.pop_back();
+            }
+            if(h->right)
+            {
+                s.push_back('1');
+                printProcessedCodes(h->right,s);
+                s.pop_back();
+            }
+            return;
+
+        }
+
+
+}
+void inOrderTraversal(HeapNode* root)
+{
+    if(root)
+    {
+
+        inOrderTraversal(root->left);
+        cout<<root->data<<" ";
+        inOrderTraversal(root->right);
+    }
+    else
+        return;
+}
 int main()
 {
-    priority_queue<point,vector<point>,MyComparartor> pq;
-    pq.push(point(10,6));
-    pq.push(point(30,3));
-    pq.push(point(20,10));
-    pq.push(point(5,2));
-    pq.push(point(1,1));
+    priority_queue<HeapNode*,vector<HeapNode*>,MyComparartor> pq;
+    int n,fr;
+    char ch;
+    cin>>n;
+    int i=0;
+    while(i<n)
+    {
+        cin>>ch>>fr;
+        pq.push(new HeapNode(ch,fr));
+        i++;
+    }
     showpq(pq);
-    cout<<pq.size()<<endl;
-    cout<<pq.top().getX()<<" "<<pq.top().getY()<<endl;
-    pq.pop();
-    showpq(pq);
+    HeapNode *h3;
+    while(!pq.empty())
+    {
+        HeapNode *h1=pq.top();
+        pq.pop();
+        HeapNode *h2=pq.top();
+        pq.pop();
+        h3=new HeapNode('@',h1->freq+h2->freq);
+        if(h1->freq<h2->freq)
+            {
+                h3->left=h1;
+                h3->right=h2;
+            }
+            else
+            {
+                h3->left=h2;
+                h3->right=h1;
+            }
+        if(pq.empty())
+            break;
+        else
+        pq.push(h3);
+    }
+  /*  cout<<h3->data<<" "<<h3->freq<<endl;
+    cout<<h3->left->data<<" "<<h3->left->freq<<endl;
+    cout<<h3->left->data<<" "<<h3->right->freq<<endl;
+    string s;
+    inOrderTraversal(h3);
+    cout<<endl;*/
+    string s;
+    printProcessedCodes(h3,s);
     return 0;
 }
