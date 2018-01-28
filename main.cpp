@@ -4,51 +4,38 @@
 #include<vector>
 #include<algorithm>
 using namespace std;
-void printVector(vector<int> v)
+/***************job scheduling problem*///////
+struct Job
 {
-    for_each(v.begin(),v.end(),[](int i)
-             {
-                 cout<<i<<" ";
-
-             }
-             );
-    cout<<endl;
-}
+    int start_time;
+    int end_time;
+};
 int main()
 {
-    vector<int> v{4, 1, 3, 5, 2, 3, 1, 7,5};
-    printVector(v);
-    auto it=find_if(v.begin(),v.end(),[](int i)
-                    {
-                        return i>4;
-                    }
-                    );
-    sort(v.begin(),v.end(),[](const &a,const &b)->bool
+    vector<Job> vector_;
+    Job *array_;
+    int n;
+    cin>>n;
+    array_=new Job[n];
+    for(int i=0;i<n;i++)
+        cin>>array_[i].start_time>>array_[i].end_time;
+    sort(array_,array_+n,[](const Job &a,const Job &b)
          {
-             return a>b;
+             return a.end_time<b.end_time;
          }
          );
-    printVector(v);
-    int count_5=count_if(v.begin(),v.end(),[](int a)
-                         {
+    vector_.push_back(array_[0]);
+    int last_time=array_[0].end_time;
+    for(int i=1;i<n;i++)
+    {
+        if(array_[i].start_time>=last_time)
+        {
+            last_time=array_[i].end_time;
+            vector_.push_back(array_[i]);
+        }
+    }
+    cout<<"jobs selected are:"<<endl;
+    for(auto it=vector_.begin();it!=vector_.end();it++)
+        cout<<(*it).start_time<<" "<<(*it).end_time<<endl;
 
-                             return a>=5;
-                         }
-                         );
-     cout<<count_5<<endl;
-     it=unique(v.begin(),v.end(),[](int a,int b)
-     {
-         return a==b;
-     }
-     );
-     printVector(v);
-     v.resize(distance(v.begin(),it));
-     printVector(v);
-     int arr[]={1,2,3,4,5,6,7,8,9,10};
-     int f=accumulate(arr,arr+10,1,[](int i,int j)
-                      {
-                          return i*j;
-                      }
-                      );
-      cout<<f;
 }
