@@ -88,7 +88,6 @@ int main()
         pq.push(new HeapNode(ch,fr));
         i++;
     }
-    showpq(pq);
     HeapNode *h3;
     while(!pq.empty())
     {
@@ -112,12 +111,6 @@ int main()
         else
         pq.push(h3);
     }
-  /*  cout<<h3->data<<" "<<h3->freq<<endl;
-    cout<<h3->left->data<<" "<<h3->left->freq<<endl;
-    cout<<h3->left->data<<" "<<h3->right->freq<<endl;
-    string s;
-    inOrderTraversal(h3);
-    cout<<endl;*/
     string s;
     printProcessedCodes(h3,s);
     return 0;
