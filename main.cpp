@@ -40,6 +40,7 @@ int main()
     delete[] array_;
 }
 *///////
+/*****************fractional knapsack problem
 struct Item
 {
     int weight;
@@ -78,26 +79,54 @@ int main()
         }
     }
     cout<<max_profit;
+    delete[] array_;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*///////////////
+/************finding number of railway platforms*/////////
+struct Train{
+int time;
+int type;/*********1 for arrival and -1 for departure*///////////
+};
+void printTrain(Train* &array_,int n)
+{
+    for(int i=0;i<2*n;i++)
+        cout<<array_[i].time<<" "<<array_[i].type<<endl;
+    cout<<endl;
+}
+int main()
+{
+    int n;
+    cin>>n;
+    Train* array_=new Train[2*n];
+    cout<<"Arrival time"<<endl;
+    for(int i=0;i<n;i++)
+    {
+        cin>>array_[i].time;
+        array_[i].type=1;
+    }
+    cout<<"Departure time"<<endl;
+    for(int i=n;i<2*n;i++)
+    {
+        cin>>array_[i].time;
+        array_[i].type=-1;
+    }
+    sort(array_,array_+2*n,[](const Train &a,const Train &b)
+         {
+        if(a.time==b.time)
+           return a.type<b.type;
+        else
+           return a.time<b.time;
+         }
+         );
+    cout<<endl;
+    printTrain(array_,n);
+    int res=0,maxRes=0;
+    for(int i=0;i<2*n;i++)
+    {
+        res+=array_[i].type;
+        if(res>maxRes)
+            maxRes=res;
+    }
+    cout<<maxRes;
+    delete[] array_;
+}
